@@ -905,7 +905,18 @@ bot.on('polling_error', (error) => {
 bot.on('error', (error) => {
   console.error('Error del bot:', error.message);
 });
+// Servidor HTTP para Render (requerido para Web Services)
+const http = require('http');
+const PORT = process.env.PORT || 3000;
 
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Bot de Tesorería Grande State - Activo');
+});
+
+server.listen(PORT, () => {
+  console.log(`🌐 Servidor HTTP escuchando en puerto ${PORT}`);
+});
 console.log('✅ Bot configurado y escuchando mensajes...');
 console.log('📋 Comandos disponibles: /start, /cartera, /hoy, /manana, /semana, /saldos, /alertas, /cuit, /resumen, /ayuda');
 console.log('🔔 Notificaciones programadas: 8:00 AM (resumen), 6:00 PM (vencimientos), cada 6h (validez crítica)');
