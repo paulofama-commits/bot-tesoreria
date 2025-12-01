@@ -126,12 +126,20 @@ bot.on('message', async (msg) => {
     const email = texto.toLowerCase().trim();
     
     // Verificar en allowed_users
-    const { data, error } = await supabase
+// Buscar todos los usuarios activos
+    const { data: users, error } = await supabase
       .from('allowed_users')
       .select('email, role')
-      .ilike('email', email)
-      .eq('is_active', true)
-      .single();
+      .eq('is_active', true);
+    
+    if (error) {
+      console.log('Error buscando usuarios:', error);
+      bot.sendMessage(chatId, '❌ Error verificando autorización. Intentá de nuevo más tarde.');
+      return;
+    }
+    
+    // Buscar email ignorando mayúsculas/minúsculas
+    const data = users?.find(u => u.email.toLowerCase() === email.toLowerCase());
     
     if (error || !data) {
       bot.sendMessage(chatId, 
