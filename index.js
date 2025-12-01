@@ -129,7 +129,8 @@ bot.on('message', async (msg) => {
     const { data, error } = await supabase
       .from('allowed_users')
       .select('email, role')
-      .eq('email', email)
+      .ilike('email', email)
+      .eq('is_active', true)
       .single();
     
     if (error || !data) {
